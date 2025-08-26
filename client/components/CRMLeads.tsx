@@ -170,8 +170,8 @@ export function CRMLeads() {
     return "text-red-600 dark:text-red-400";
   };
 
-  const statuses = ["New", "Qualified", "Working", "Nurturing"];
-  const sources = ["Website", "Referral", "Cold Call", "LinkedIn", "Event"];
+  const statuses = ["NEW", "QUALIFIED", "WORKING", "UNQUALIFIED"];
+  const sources = ["WEBSITE", "REFERRAL", "TRADE_SHOW", "COLD_CALL", "EMAIL", "PARTNER"];
 
   const filteredLeads = leads.filter((lead) => {
     const matchesFilter =
