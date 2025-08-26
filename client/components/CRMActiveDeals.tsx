@@ -52,25 +52,6 @@ import {
   SelectValue,
 } from "./ui/select";
 
-interface ActiveDeal {
-  id: string;
-  dealName: string;
-  businessLine: string;
-  associatedAccount: string;
-  associatedContact: string;
-  closingDate: string;
-  probability: number;
-  dealValue: number;
-  approvedBy: string;
-  description: string;
-  nextStep: string;
-  geo: string;
-  entity: string;
-  stage: string;
-  owner: string;
-  ownerId: string;
-  createdAt: string;
-}
 
 export function CRMActiveDeals() {
   const { user } = useAuth();
