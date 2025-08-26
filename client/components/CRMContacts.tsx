@@ -182,8 +182,8 @@ export function CRMContacts() {
     ),
   ).map(owner => ({ id: owner, name: owner }));
 
-  const statuses = ["Suspect", "Prospect", "Active Deal", "Do Not Call"];
-  const sources = ["Data Research", "Referral", "Event"];
+  const statuses = ["SUSPECT", "PROSPECT", "ACTIVE_DEAL", "DO_NOT_CALL"];
+  const sources = ["DATA_RESEARCH", "REFERRAL", "EVENT"];
 
   if (loading) {
     return (
