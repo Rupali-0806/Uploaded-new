@@ -114,9 +114,14 @@ export function CRMContacts() {
           source: formData.source,
           owner: user?.displayName || "Current User",
           status: formData.status,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          createdBy: "current-user",
+          updatedBy: "current-user"
         };
+
+        console.log('📦 EXACT DATA BEING SENT TO API:');
+        console.log('newContactData:', JSON.stringify(newContactData, null, 2));
+        console.log('Source value:', newContactData.source, 'Type:', typeof newContactData.source);
+        console.log('Status value:', newContactData.status, 'Type:', typeof newContactData.status);
         console.log("Creating new contact:", newContactData);
         console.log("Calling addContact function...");
         await addContact(newContactData);
