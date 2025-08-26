@@ -81,8 +81,10 @@ export function CRMContacts() {
     };
   }, []);
 
-  const handleSaveContact = () => {
-    console.log("Saving contact:", formData);
+  const handleSaveContact = async () => {
+    console.log("=== CONTACT SAVE ATTEMPT ===");
+    console.log("Form data:", formData);
+    console.log("User:", user);
 
     if (!formData.firstName || !formData.lastName) {
       alert("First Name and Last Name are required!");
@@ -111,13 +113,29 @@ export function CRMContacts() {
           timeZone: formData.timeZone,
           source: formData.source,
           owner: user?.displayName || "Current User",
-          ownerId: user?.id || "current-user",
           status: formData.status,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          createdBy: "current-user",
+          updatedBy: "current-user",
         };
+
+        console.log("📦 EXACT DATA BEING SENT TO API:");
+        console.log("newContactData:", JSON.stringify(newContactData, null, 2));
+        console.log(
+          "Source value:",
+          newContactData.source,
+          "Type:",
+          typeof newContactData.source,
+        );
+        console.log(
+          "Status value:",
+          newContactData.status,
+          "Type:",
+          typeof newContactData.status,
+        );
         console.log("Creating new contact:", newContactData);
-        addContact(newContactData);
+        console.log("Calling addContact function...");
+        await addContact(newContactData);
+        console.log("addContact completed successfully!");
         alert("Contact created successfully!");
       }
 
@@ -170,29 +188,18 @@ export function CRMContacts() {
   const filteredContacts = contacts.filter((contact) => {
     const matchesStatus =
       filterStatus === "all" || contact.status?.toLowerCase() === filterStatus;
-    const matchesOwner =
-      filterOwner === "all" || contact.ownerId === filterOwner;
+    const matchesOwner = filterOwner === "all" || contact.owner === filterOwner;
 
     return matchesStatus && matchesOwner;
   });
 
   // Get unique owners for filter dropdown
   const uniqueOwners = Array.from(
-    new Set(
-      contacts.map((contact) => ({ id: contact.ownerId, name: contact.owner })),
-    ),
-  ).reduce(
-    (acc, owner) => {
-      if (!acc.find((o) => o.id === owner.id)) {
-        acc.push(owner);
-      }
-      return acc;
-    },
-    [] as { id: string; name: string }[],
-  );
+    new Set(contacts.map((contact) => contact.owner).filter(Boolean)),
+  ).map((owner) => ({ id: owner, name: owner }));
 
-  const statuses = ["Suspect", "Prospect", "Active Deal", "Do Not Call"];
-  const sources = ["Data Research", "Referral", "Event"];
+  const statuses = ["SUSPECT", "PROSPECT", "ACTIVE_DEAL", "DO_NOT_CALL"];
+  const sources = ["DATA_RESEARCH", "REFERRAL", "EVENT"];
 
   if (loading) {
     return (
@@ -408,7 +415,16 @@ export function CRMContacts() {
                 Cancel
               </Button>
               <Button
-                onClick={handleSaveContact}
+                onClick={() => {
+                  console.log("👆 CONTACT SAVE BUTTON CLICKED!");
+                  console.log("Form data state:", formData);
+                  console.log("Validation check:", {
+                    hasFirstName: !!formData.firstName,
+                    hasLastName: !!formData.lastName,
+                    isDisabled: !formData.firstName || !formData.lastName,
+                  });
+                  handleSaveContact();
+                }}
                 disabled={!formData.firstName || !formData.lastName}
                 className="bg-blue-600 hover:bg-blue-700"
               >

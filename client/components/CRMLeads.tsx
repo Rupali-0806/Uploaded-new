@@ -85,8 +85,8 @@ export function CRMLeads() {
   const handleSaveLead = () => {
     console.log("Saving lead:", formData);
 
-    if (!formData.name || !formData.company) {
-      alert("Name and Company are required!");
+    if (!formData.firstName || !formData.lastName || !formData.company) {
+      alert("First Name, Last Name and Company are required!");
       return;
     }
 
@@ -99,16 +99,18 @@ export function CRMLeads() {
       } else {
         // Create new lead
         const newLeadData = {
-          name: formData.name || "",
+          firstName: formData.firstName || "",
+          lastName: formData.lastName || "",
           company: formData.company || "",
           title: formData.title || "",
           email: formData.email || "",
           phone: formData.phone || "",
-          status: formData.status || "New",
-          source: formData.source || "Website",
-          score: formData.score || 0,
-          value: formData.value || "$0",
-          lastActivity: "Just now",
+          status: formData.status || "NEW",
+          leadSource: formData.leadSource || "WEBSITE",
+          rating: formData.rating || "COLD",
+          owner: formData.owner || "current-user",
+          createdBy: "current-user",
+          updatedBy: "current-user",
         };
         console.log("Creating new lead:", newLeadData);
         addLead(newLeadData);
@@ -148,15 +150,15 @@ export function CRMLeads() {
   };
 
   const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case "new":
         return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
       case "qualified":
         return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
       case "working":
         return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
-      case "nurturing":
-        return "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400";
+      case "unqualified":
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
       default:
         return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400";
     }
@@ -168,8 +170,15 @@ export function CRMLeads() {
     return "text-red-600 dark:text-red-400";
   };
 
-  const statuses = ["New", "Qualified", "Working", "Nurturing"];
-  const sources = ["Website", "Referral", "Cold Call", "LinkedIn", "Event"];
+  const statuses = ["NEW", "QUALIFIED", "WORKING", "UNQUALIFIED"];
+  const sources = [
+    "WEBSITE",
+    "REFERRAL",
+    "TRADE_SHOW",
+    "COLD_CALL",
+    "EMAIL",
+    "PARTNER",
+  ];
 
   const filteredLeads = leads.filter((lead) => {
     const matchesFilter =
@@ -214,14 +223,25 @@ export function CRMLeads() {
             </DialogHeader>
             <div className="grid grid-cols-2 gap-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Name *</Label>
+                <Label htmlFor="firstName">First Name *</Label>
                 <Input
-                  id="name"
-                  value={formData.name || ""}
+                  id="firstName"
+                  value={formData.firstName || ""}
                   onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
+                    setFormData({ ...formData, firstName: e.target.value })
                   }
-                  placeholder="Enter full name"
+                  placeholder="Enter first name"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lastName">Last Name *</Label>
+                <Input
+                  id="lastName"
+                  value={formData.lastName || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, lastName: e.target.value })
+                  }
+                  placeholder="Enter last name"
                 />
               </div>
               <div className="space-y-2">
@@ -318,11 +338,11 @@ export function CRMLeads() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="source">Source</Label>
+                <Label htmlFor="leadSource">Source</Label>
                 <Select
-                  value={formData.source || ""}
+                  value={formData.leadSource || ""}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, source: value })
+                    setFormData({ ...formData, leadSource: value })
                   }
                 >
                   <SelectTrigger>
@@ -345,7 +365,9 @@ export function CRMLeads() {
               </Button>
               <Button
                 onClick={handleSaveLead}
-                disabled={!formData.name || !formData.company}
+                disabled={
+                  !formData.firstName || !formData.lastName || !formData.company
+                }
                 className="bg-blue-600 hover:bg-blue-700"
               >
                 <Save className="h-4 w-4 mr-2" />
@@ -479,7 +501,7 @@ export function CRMLeads() {
                   <TableCell>
                     <div>
                       <div className="font-medium text-gray-900 dark:text-gray-100">
-                        {lead.name}
+                        {lead.firstName} {lead.lastName}
                       </div>
                       <div className="text-sm text-gray-500 dark:text-gray-400">
                         {lead.title}
@@ -504,7 +526,7 @@ export function CRMLeads() {
                       {lead.status}
                     </Badge>
                   </TableCell>
-                  <TableCell>{lead.source}</TableCell>
+                  <TableCell>{lead.leadSource}</TableCell>
                   <TableCell>
                     <span
                       className={`font-semibold ${getScoreColor(lead.score)}`}

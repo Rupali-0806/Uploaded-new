@@ -108,22 +108,42 @@ interface CRMContextType {
   error: string | null;
 
   // Lead operations
-  addLead: (lead: Omit<Lead, "id" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy">) => Promise<void>;
+  addLead: (
+    lead: Omit<
+      Lead,
+      "id" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy"
+    >,
+  ) => Promise<void>;
   updateLead: (id: string, updates: Partial<Lead>) => Promise<void>;
   deleteLead: (id: string) => Promise<void>;
 
   // Account operations
-  addAccount: (account: Omit<Account, "id" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy">) => Promise<void>;
+  addAccount: (
+    account: Omit<
+      Account,
+      "id" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy"
+    >,
+  ) => Promise<void>;
   updateAccount: (id: string, updates: Partial<Account>) => Promise<void>;
   deleteAccount: (id: string) => Promise<void>;
 
   // Contact operations
-  addContact: (contact: Omit<Contact, "id" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy">) => Promise<void>;
+  addContact: (
+    contact: Omit<
+      Contact,
+      "id" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy"
+    >,
+  ) => Promise<void>;
   updateContact: (id: string, updates: Partial<Contact>) => Promise<void>;
   deleteContact: (id: string) => Promise<void>;
 
   // Deal operations
-  addDeal: (deal: Omit<ActiveDeal, "id" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy">) => Promise<void>;
+  addDeal: (
+    deal: Omit<
+      ActiveDeal,
+      "id" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy"
+    >,
+  ) => Promise<void>;
   updateDeal: (id: string, updates: Partial<ActiveDeal>) => Promise<void>;
   deleteDeal: (id: string) => Promise<void>;
 
@@ -153,21 +173,21 @@ export function CRMProvider({ children }: { children: ReactNode }) {
     try {
       setLoading(true);
       setError(null);
-      
+
       console.log("🔄 Fetching data from backend...");
-      
+
       const [leadsRes, accountsRes, contactsRes, dealsRes] = await Promise.all([
         api.leads.getAll({ limit: 100 }),
         api.accounts.getAll({ limit: 100 }),
         api.contacts.getAll({ limit: 100 }),
-        api.deals.getAll({ limit: 100 })
+        api.deals.getAll({ limit: 100 }),
       ]);
 
       console.log("✅ Data fetched successfully:", {
         leads: leadsRes.data?.length || 0,
         accounts: accountsRes.data?.length || 0,
         contacts: contactsRes.data?.length || 0,
-        deals: dealsRes.data?.length || 0
+        deals: dealsRes.data?.length || 0,
       });
 
       setLeads(leadsRes.data || []);
@@ -188,12 +208,17 @@ export function CRMProvider({ children }: { children: ReactNode }) {
   }, []);
 
   // Lead operations
-  const addLead = async (leadData: Omit<Lead, "id" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy">) => {
+  const addLead = async (
+    leadData: Omit<
+      Lead,
+      "id" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy"
+    >,
+  ) => {
     try {
       setError(null);
       const response = await api.leads.create(leadData);
       if (response.success && response.data) {
-        setLeads(prev => [...prev, response.data]);
+        setLeads((prev) => [...prev, response.data]);
         console.log("Lead added:", response.data);
       }
     } catch (err) {
@@ -208,7 +233,9 @@ export function CRMProvider({ children }: { children: ReactNode }) {
       setError(null);
       const response = await api.leads.update(id, updates);
       if (response.success && response.data) {
-        setLeads(prev => prev.map(lead => lead.id === id ? response.data : lead));
+        setLeads((prev) =>
+          prev.map((lead) => (lead.id === id ? response.data : lead)),
+        );
         console.log("Lead updated:", id, updates);
       }
     } catch (err) {
@@ -222,7 +249,7 @@ export function CRMProvider({ children }: { children: ReactNode }) {
     try {
       setError(null);
       await api.leads.delete(id);
-      setLeads(prev => prev.filter(lead => lead.id !== id));
+      setLeads((prev) => prev.filter((lead) => lead.id !== id));
       console.log("Lead deleted:", id);
     } catch (err) {
       console.error("Error deleting lead:", err);
@@ -232,12 +259,17 @@ export function CRMProvider({ children }: { children: ReactNode }) {
   };
 
   // Account operations
-  const addAccount = async (accountData: Omit<Account, "id" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy">) => {
+  const addAccount = async (
+    accountData: Omit<
+      Account,
+      "id" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy"
+    >,
+  ) => {
     try {
       setError(null);
       const response = await api.accounts.create(accountData);
       if (response.success && response.data) {
-        setAccounts(prev => [...prev, response.data]);
+        setAccounts((prev) => [...prev, response.data]);
         console.log("Account added:", response.data);
       }
     } catch (err) {
@@ -252,7 +284,9 @@ export function CRMProvider({ children }: { children: ReactNode }) {
       setError(null);
       const response = await api.accounts.update(id, updates);
       if (response.success && response.data) {
-        setAccounts(prev => prev.map(account => account.id === id ? response.data : account));
+        setAccounts((prev) =>
+          prev.map((account) => (account.id === id ? response.data : account)),
+        );
         console.log("Account updated:", id, updates);
       }
     } catch (err) {
@@ -266,7 +300,7 @@ export function CRMProvider({ children }: { children: ReactNode }) {
     try {
       setError(null);
       await api.accounts.delete(id);
-      setAccounts(prev => prev.filter(account => account.id !== id));
+      setAccounts((prev) => prev.filter((account) => account.id !== id));
       console.log("Account deleted:", id);
     } catch (err) {
       console.error("Error deleting account:", err);
@@ -276,12 +310,20 @@ export function CRMProvider({ children }: { children: ReactNode }) {
   };
 
   // Contact operations
-  const addContact = async (contactData: Omit<Contact, "id" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy">) => {
+  const addContact = async (
+    contactData: Omit<
+      Contact,
+      "id" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy"
+    >,
+  ) => {
     try {
+      console.log("🚀 CRM Context: addContact called with:", contactData);
       setError(null);
+      console.log("📡 Calling api.contacts.create...");
       const response = await api.contacts.create(contactData);
+      console.log("📬 API response received:", response);
       if (response.success && response.data) {
-        setContacts(prev => [...prev, response.data]);
+        setContacts((prev) => [...prev, response.data]);
         console.log("Contact added:", response.data);
       }
     } catch (err) {
@@ -296,7 +338,9 @@ export function CRMProvider({ children }: { children: ReactNode }) {
       setError(null);
       const response = await api.contacts.update(id, updates);
       if (response.success && response.data) {
-        setContacts(prev => prev.map(contact => contact.id === id ? response.data : contact));
+        setContacts((prev) =>
+          prev.map((contact) => (contact.id === id ? response.data : contact)),
+        );
         console.log("Contact updated:", id, updates);
       }
     } catch (err) {
@@ -310,7 +354,7 @@ export function CRMProvider({ children }: { children: ReactNode }) {
     try {
       setError(null);
       await api.contacts.delete(id);
-      setContacts(prev => prev.filter(contact => contact.id !== id));
+      setContacts((prev) => prev.filter((contact) => contact.id !== id));
       console.log("Contact deleted:", id);
     } catch (err) {
       console.error("Error deleting contact:", err);
@@ -320,12 +364,20 @@ export function CRMProvider({ children }: { children: ReactNode }) {
   };
 
   // Deal operations
-  const addDeal = async (dealData: Omit<ActiveDeal, "id" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy">) => {
+  const addDeal = async (
+    dealData: Omit<
+      ActiveDeal,
+      "id" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy"
+    >,
+  ) => {
     try {
+      console.log("🚀 CRM Context: addDeal called with:", dealData);
       setError(null);
+      console.log("📡 Calling api.deals.create...");
       const response = await api.deals.create(dealData);
+      console.log("📬 API response received:", response);
       if (response.success && response.data) {
-        setDeals(prev => [...prev, response.data]);
+        setDeals((prev) => [...prev, response.data]);
         console.log("Deal added:", response.data);
       }
     } catch (err) {
@@ -340,7 +392,9 @@ export function CRMProvider({ children }: { children: ReactNode }) {
       setError(null);
       const response = await api.deals.update(id, updates);
       if (response.success && response.data) {
-        setDeals(prev => prev.map(deal => deal.id === id ? response.data : deal));
+        setDeals((prev) =>
+          prev.map((deal) => (deal.id === id ? response.data : deal)),
+        );
         console.log("Deal updated:", id, updates);
       }
     } catch (err) {
@@ -354,7 +408,7 @@ export function CRMProvider({ children }: { children: ReactNode }) {
     try {
       setError(null);
       await api.deals.delete(id);
-      setDeals(prev => prev.filter(deal => deal.id !== id));
+      setDeals((prev) => prev.filter((deal) => deal.id !== id));
       console.log("Deal deleted:", id);
     } catch (err) {
       console.error("Error deleting deal:", err);
@@ -428,4 +482,3 @@ export function useCRM() {
 
 // Export types for use in components
 export type { Lead, Account, Contact, ActiveDeal };
-

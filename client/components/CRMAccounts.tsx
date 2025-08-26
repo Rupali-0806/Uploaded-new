@@ -82,8 +82,8 @@ export function CRMAccounts() {
   const handleSaveAccount = () => {
     console.log("Saving account:", formData);
 
-    if (!formData.name || !formData.industry) {
-      alert("Name and Industry are required!");
+    if (!formData.accountName || !formData.industry) {
+      alert("Account Name and Industry are required!");
       return;
     }
 
@@ -96,19 +96,19 @@ export function CRMAccounts() {
       } else {
         // Create new account
         const newAccountData = {
-          name: formData.name || "",
+          accountName: formData.accountName || "",
           industry: formData.industry || "",
-          type: formData.type || "Customer",
+          accountRating: formData.accountRating || "BRONZE",
           revenue: formData.revenue || "$0",
-          employees: formData.employees || "1-10",
-          location: formData.location || "",
-          phone: formData.phone || "",
+          numberOfEmployees: formData.numberOfEmployees || "1-10",
+          city: formData.city || "",
+          state: formData.state || "",
+          country: formData.country || "",
           website: formData.website || "",
-          owner: formData.owner || "Current User",
-          rating: formData.rating || "Cold",
-          lastActivity: "Just now",
-          activeDeals: 0,
-          contacts: 0,
+          accountOwner: formData.accountOwner || "Current User",
+          status: formData.status || "PROSPECT",
+          createdBy: "current-user",
+          updatedBy: "current-user",
         };
         console.log("Creating new account:", newAccountData);
         addAccount(newAccountData);
@@ -131,7 +131,7 @@ export function CRMAccounts() {
     setShowNewAccountDialog(true);
   };
 
-  const handleDeleteAccount = (accountId: number) => {
+  const handleDeleteAccount = (accountId: string) => {
     console.log("handleDeleteAccount called with ID:", accountId);
     if (window.confirm("Are you sure you want to delete this account?")) {
       deleteAccount(accountId);
@@ -146,14 +146,16 @@ export function CRMAccounts() {
     setShowNewAccountDialog(false);
   };
 
-  const getTypeColor = (type: string) => {
-    switch (type.toLowerCase()) {
-      case "customer":
-        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
+  const getTypeColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "suspect":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
       case "prospect":
         return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
-      case "partner":
-        return "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400";
+      case "active_deal":
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
+      case "do_not_call":
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
       default:
         return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400";
     }
@@ -161,18 +163,20 @@ export function CRMAccounts() {
 
   const getRatingColor = (rating: string) => {
     switch (rating.toLowerCase()) {
-      case "hot":
-        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
-      case "warm":
+      case "platinum":
+        return "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400";
+      case "gold":
         return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
-      case "cold":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
+      case "silver":
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400";
+      case "bronze":
+        return "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400";
       default:
         return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400";
     }
   };
 
-  const types = ["Customer", "Prospect", "Partner"];
+  const statuses = ["SUSPECT", "PROSPECT", "ACTIVE_DEAL", "DO_NOT_CALL"];
   const industries = [
     "Technology",
     "Software",
@@ -181,12 +185,13 @@ export function CRMAccounts() {
     "Healthcare",
     "Education",
   ];
-  const ratings = ["Hot", "Warm", "Cold"];
+  const ratings = ["PLATINUM", "GOLD", "SILVER", "BRONZE"];
   const employeeSizes = ["1-10", "10-50", "50-100", "100-500", "500+", "1000+"];
 
   const filteredAccounts = accounts.filter((account) => {
     const matchesFilter =
-      filterType === "all" || account.type.toLowerCase() === filterType;
+      filterType === "all" ||
+      (account.status && account.status.toLowerCase() === filterType);
 
     return matchesFilter;
   });
@@ -230,12 +235,12 @@ export function CRMAccounts() {
             </DialogHeader>
             <div className="grid grid-cols-2 gap-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Account Name *</Label>
+                <Label htmlFor="accountName">Account Name *</Label>
                 <Input
-                  id="name"
-                  value={formData.name || ""}
+                  id="accountName"
+                  value={formData.accountName || ""}
                   onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
+                    setFormData({ ...formData, accountName: e.target.value })
                   }
                   placeholder="Enter account name"
                 />
@@ -261,22 +266,21 @@ export function CRMAccounts() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="type">Type</Label>
+                <Label htmlFor="status">Status</Label>
                 <Select
-                  value={formData.type || ""}
+                  value={formData.status || ""}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, type: value })
+                    setFormData({ ...formData, status: value })
                   }
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select type" />
+                    <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
-                    {types.map((type) => (
-                      <SelectItem key={type} value={type}>
-                        {type}
-                      </SelectItem>
-                    ))}
+                    <SelectItem value="SUSPECT">Suspect</SelectItem>
+                    <SelectItem value="PROSPECT">Prospect</SelectItem>
+                    <SelectItem value="ACTIVE_DEAL">Active Deal</SelectItem>
+                    <SelectItem value="DO_NOT_CALL">Do Not Call</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -292,11 +296,11 @@ export function CRMAccounts() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="employees">Employees</Label>
+                <Label htmlFor="numberOfEmployees">Employees</Label>
                 <Select
-                  value={formData.employees || ""}
+                  value={formData.numberOfEmployees || ""}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, employees: value })
+                    setFormData({ ...formData, numberOfEmployees: value })
                   }
                 >
                   <SelectTrigger>
@@ -312,23 +316,23 @@ export function CRMAccounts() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="location">Location</Label>
+                <Label htmlFor="city">City</Label>
                 <Input
-                  id="location"
-                  value={formData.location || ""}
+                  id="city"
+                  value={formData.city || ""}
                   onChange={(e) =>
-                    setFormData({ ...formData, location: e.target.value })
+                    setFormData({ ...formData, city: e.target.value })
                   }
-                  placeholder="City, State"
+                  placeholder="Enter city"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone</Label>
+                <Label htmlFor="boardNumber">Phone</Label>
                 <Input
-                  id="phone"
-                  value={formData.phone || ""}
+                  id="boardNumber"
+                  value={formData.boardNumber || ""}
                   onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
+                    setFormData({ ...formData, boardNumber: e.target.value })
                   }
                   placeholder="+1 (555) 123-4567"
                 />
@@ -345,22 +349,22 @@ export function CRMAccounts() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="owner">Owner</Label>
+                <Label htmlFor="accountOwner">Owner</Label>
                 <Input
-                  id="owner"
-                  value={formData.owner || ""}
+                  id="accountOwner"
+                  value={formData.accountOwner || ""}
                   onChange={(e) =>
-                    setFormData({ ...formData, owner: e.target.value })
+                    setFormData({ ...formData, accountOwner: e.target.value })
                   }
                   placeholder="Account owner"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="rating">Rating</Label>
+                <Label htmlFor="accountRating">Rating</Label>
                 <Select
-                  value={formData.rating || ""}
+                  value={formData.accountRating || ""}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, rating: value })
+                    setFormData({ ...formData, accountRating: value })
                   }
                 >
                   <SelectTrigger>
@@ -383,7 +387,7 @@ export function CRMAccounts() {
               </Button>
               <Button
                 onClick={handleSaveAccount}
-                disabled={!formData.name || !formData.industry}
+                disabled={!formData.accountName || !formData.industry}
                 className="bg-blue-600 hover:bg-blue-700"
               >
                 <Save className="h-4 w-4 mr-2" />
@@ -417,10 +421,10 @@ export function CRMAccounts() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Customers
+                  Prospects
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  {accounts.filter((a) => a.type === "Customer").length}
+                  {accounts.filter((a) => a.status === "PROSPECT").length}
                 </p>
               </div>
               <Users className="h-8 w-8 text-green-600" />
@@ -433,10 +437,10 @@ export function CRMAccounts() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Prospects
+                  Active Deals
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  {accounts.filter((a) => a.type === "Prospect").length}
+                  {accounts.filter((a) => a.status === "ACTIVE_DEAL").length}
                 </p>
               </div>
               <DollarSign className="h-8 w-8 text-yellow-600" />
@@ -449,10 +453,10 @@ export function CRMAccounts() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Partners
+                  Suspects
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  {accounts.filter((a) => a.type === "Partner").length}
+                  {accounts.filter((a) => a.status === "SUSPECT").length}
                 </p>
               </div>
               <Users className="h-8 w-8 text-purple-600" />
@@ -476,14 +480,17 @@ export function CRMAccounts() {
                 <DropdownMenuItem onClick={() => setFilterType("all")}>
                   All Types
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setFilterType("customer")}>
-                  Customer
+                <DropdownMenuItem onClick={() => setFilterType("suspect")}>
+                  Suspect
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setFilterType("prospect")}>
                   Prospect
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setFilterType("partner")}>
-                  Partner
+                <DropdownMenuItem onClick={() => setFilterType("active_deal")}>
+                  Active Deal
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setFilterType("do_not_call")}>
+                  Do Not Call
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -504,8 +511,8 @@ export function CRMAccounts() {
                 <TableHead>Location</TableHead>
                 <TableHead>Owner</TableHead>
                 <TableHead>Rating</TableHead>
-                <TableHead>Contacts</TableHead>
-                <TableHead>Last Activity</TableHead>
+                <TableHead>Employees</TableHead>
+                <TableHead>Updated</TableHead>
                 <TableHead className="w-[50px]"></TableHead>
               </TableRow>
             </TableHeader>
@@ -515,7 +522,7 @@ export function CRMAccounts() {
                   <TableCell>
                     <div>
                       <div className="font-medium text-gray-900 dark:text-gray-100">
-                        {account.name}
+                        {account.accountName}
                       </div>
                       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                         <Globe className="h-3 w-3 mr-1" />
@@ -525,8 +532,10 @@ export function CRMAccounts() {
                   </TableCell>
                   <TableCell>{account.industry}</TableCell>
                   <TableCell>
-                    <Badge className={getTypeColor(account.type)}>
-                      {account.type}
+                    <Badge
+                      className={getTypeColor(account.status || "PROSPECT")}
+                    >
+                      {account.status}
                     </Badge>
                   </TableCell>
                   <TableCell className="font-medium">
@@ -535,25 +544,29 @@ export function CRMAccounts() {
                   <TableCell>
                     <div className="flex items-center text-sm">
                       <MapPin className="h-3 w-3 mr-1" />
-                      {account.location}
+                      {account.city}, {account.state}
                     </div>
                   </TableCell>
-                  <TableCell>{account.owner}</TableCell>
+                  <TableCell>{account.accountOwner}</TableCell>
                   <TableCell>
-                    <Badge className={getRatingColor(account.rating)}>
-                      {account.rating}
+                    <Badge
+                      className={getRatingColor(
+                        account.accountRating || "BRONZE",
+                      )}
+                    >
+                      {account.accountRating}
                     </Badge>
                   </TableCell>
                   <TableCell>
                     <div className="text-sm">
-                      <div>{account.contacts} contacts</div>
+                      <div>{account.numberOfEmployees}</div>
                       <div className="text-gray-500 dark:text-gray-400">
-                        {account.activeDeals} deals
+                        employees
                       </div>
                     </div>
                   </TableCell>
                   <TableCell className="text-sm text-gray-500 dark:text-gray-400">
-                    {account.lastActivity}
+                    {new Date(account.updatedAt).toLocaleDateString()}
                   </TableCell>
                   <TableCell>
                     <div className="flex space-x-2">

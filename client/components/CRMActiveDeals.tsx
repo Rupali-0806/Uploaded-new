@@ -52,26 +52,6 @@ import {
   SelectValue,
 } from "./ui/select";
 
-interface ActiveDeal {
-  id: string;
-  dealName: string;
-  businessLine: string;
-  associatedAccount: string;
-  associatedContact: string;
-  closingDate: string;
-  probability: number;
-  dealValue: number;
-  approvedBy: string;
-  description: string;
-  nextStep: string;
-  geo: string;
-  entity: string;
-  stage: string;
-  owner: string;
-  ownerId: string;
-  createdAt: string;
-}
-
 export function CRMActiveDeals() {
   const { user } = useAuth();
   const { deals, addDeal, updateDeal, deleteDeal } = useCRM();
@@ -102,8 +82,10 @@ export function CRMActiveDeals() {
     };
   }, []);
 
-  const handleSaveDeal = () => {
-    console.log("Saving deal:", formData);
+  const handleSaveDeal = async () => {
+    console.log("=== DEAL SAVE ATTEMPT ===");
+    console.log("Form data:", formData);
+    console.log("User:", user);
 
     if (!formData.dealName || !formData.businessLine) {
       alert("Deal Name and Business Line are required!");
@@ -114,31 +96,44 @@ export function CRMActiveDeals() {
       if (editingDeal) {
         // Update existing deal
         console.log("Updating existing deal:", editingDeal.id);
-        updateDeal(editingDeal.id, formData);
+        const updatePayload = {
+          ...formData,
+          probability:
+            formData.probability != null
+              ? String(formData.probability)
+              : undefined,
+          dealValue:
+            formData.dealValue != null ? String(formData.dealValue) : undefined,
+        };
+        updateDeal(editingDeal.id, updatePayload);
         alert("Deal updated successfully!");
       } else {
         // Create new deal
         const newDealData = {
           dealName: formData.dealName || "",
-          businessLine: formData.businessLine || "",
+          businessLine: formData.businessLine || "HUMAN_CAPITAL",
           associatedAccount: formData.associatedAccount || "",
           associatedContact: formData.associatedContact || "",
           closingDate:
             formData.closingDate || new Date().toISOString().split("T")[0],
-          probability: formData.probability || 50,
-          dealValue: formData.dealValue || 0,
+          probability:
+            formData.probability != null ? String(formData.probability) : "50",
+          dealValue:
+            formData.dealValue != null ? String(formData.dealValue) : "0",
           approvedBy: formData.approvedBy || "",
           description: formData.description || "",
           nextStep: formData.nextStep || "",
-          geo: formData.geo || "Americas",
-          entity: formData.entity || "Yitro Global",
-          stage: formData.stage || "Opportunity Identified",
-          owner: user?.displayName || "Current User",
-          ownerId: user?.id || "current-user",
-          createdAt: new Date().toISOString(),
+          geo: formData.geo || "AMERICAS",
+          entity: formData.entity || "YITRO_GLOBAL",
+          stage: formData.stage || "OPPORTUNITY_IDENTIFIED",
+          dealOwner: user?.displayName || "Current User",
+          createdBy: "current-user",
+          updatedBy: "current-user",
         };
         console.log("Creating new deal:", newDealData);
-        addDeal(newDealData);
+        console.log("Calling addDeal function...");
+        await addDeal(newDealData);
+        console.log("addDeal completed successfully!");
         alert("Deal created successfully!");
       }
 
@@ -509,7 +504,16 @@ export function CRMActiveDeals() {
                 Cancel
               </Button>
               <Button
-                onClick={handleSaveDeal}
+                onClick={() => {
+                  console.log("👆 DEAL SAVE BUTTON CLICKED!");
+                  console.log("Form data state:", formData);
+                  console.log("Validation check:", {
+                    hasDealName: !!formData.dealName,
+                    hasBusinessLine: !!formData.businessLine,
+                    isDisabled: !formData.dealName || !formData.businessLine,
+                  });
+                  handleSaveDeal();
+                }}
                 disabled={!formData.dealName || !formData.businessLine}
                 className="bg-blue-600 hover:bg-blue-700"
               >
