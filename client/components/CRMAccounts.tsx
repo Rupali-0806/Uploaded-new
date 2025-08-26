@@ -82,8 +82,8 @@ export function CRMAccounts() {
   const handleSaveAccount = () => {
     console.log("Saving account:", formData);
 
-    if (!formData.name || !formData.industry) {
-      alert("Name and Industry are required!");
+    if (!formData.accountName || !formData.industry) {
+      alert("Account Name and Industry are required!");
       return;
     }
 
@@ -96,19 +96,19 @@ export function CRMAccounts() {
       } else {
         // Create new account
         const newAccountData = {
-          name: formData.name || "",
+          accountName: formData.accountName || "",
           industry: formData.industry || "",
-          type: formData.type || "Customer",
+          accountRating: formData.accountRating || "BRONZE",
           revenue: formData.revenue || "$0",
-          employees: formData.employees || "1-10",
-          location: formData.location || "",
-          phone: formData.phone || "",
+          numberOfEmployees: formData.numberOfEmployees || "1-10",
+          city: formData.city || "",
+          state: formData.state || "",
+          country: formData.country || "",
           website: formData.website || "",
-          owner: formData.owner || "Current User",
-          rating: formData.rating || "Cold",
-          lastActivity: "Just now",
-          activeDeals: 0,
-          contacts: 0,
+          accountOwner: formData.accountOwner || "Current User",
+          status: formData.status || "PROSPECT",
+          createdBy: "current-user",
+          updatedBy: "current-user"
         };
         console.log("Creating new account:", newAccountData);
         addAccount(newAccountData);
@@ -230,12 +230,12 @@ export function CRMAccounts() {
             </DialogHeader>
             <div className="grid grid-cols-2 gap-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Account Name *</Label>
+                <Label htmlFor="accountName">Account Name *</Label>
                 <Input
-                  id="name"
-                  value={formData.name || ""}
+                  id="accountName"
+                  value={formData.accountName || ""}
                   onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
+                    setFormData({ ...formData, accountName: e.target.value })
                   }
                   placeholder="Enter account name"
                 />
