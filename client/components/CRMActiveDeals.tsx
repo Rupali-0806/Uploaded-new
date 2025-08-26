@@ -82,8 +82,10 @@ export function CRMActiveDeals() {
     };
   }, []);
 
-  const handleSaveDeal = () => {
-    console.log("Saving deal:", formData);
+  const handleSaveDeal = async () => {
+    console.log("=== DEAL SAVE ATTEMPT ===");
+    console.log("Form data:", formData);
+    console.log("User:", user);
 
     if (!formData.dealName || !formData.businessLine) {
       alert("Deal Name and Business Line are required!");
@@ -129,7 +131,9 @@ export function CRMActiveDeals() {
           updatedBy: "current-user",
         };
         console.log("Creating new deal:", newDealData);
-        addDeal(newDealData);
+        console.log("Calling addDeal function...");
+        await addDeal(newDealData);
+        console.log("addDeal completed successfully!");
         alert("Deal created successfully!");
       }
 

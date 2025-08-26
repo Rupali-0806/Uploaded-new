@@ -81,8 +81,10 @@ export function CRMContacts() {
     };
   }, []);
 
-  const handleSaveContact = () => {
-    console.log("Saving contact:", formData);
+  const handleSaveContact = async () => {
+    console.log("=== CONTACT SAVE ATTEMPT ===");
+    console.log("Form data:", formData);
+    console.log("User:", user);
 
     if (!formData.firstName || !formData.lastName) {
       alert("First Name and Last Name are required!");
@@ -116,7 +118,9 @@ export function CRMContacts() {
           updatedAt: new Date().toISOString(),
         };
         console.log("Creating new contact:", newContactData);
-        addContact(newContactData);
+        console.log("Calling addContact function...");
+        await addContact(newContactData);
+        console.log("addContact completed successfully!");
         alert("Contact created successfully!");
       }
 
