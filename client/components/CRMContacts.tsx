@@ -111,7 +111,6 @@ export function CRMContacts() {
           timeZone: formData.timeZone,
           source: formData.source,
           owner: user?.displayName || "Current User",
-          ownerId: user?.id || "current-user",
           status: formData.status,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
@@ -171,7 +170,7 @@ export function CRMContacts() {
     const matchesStatus =
       filterStatus === "all" || contact.status?.toLowerCase() === filterStatus;
     const matchesOwner =
-      filterOwner === "all" || contact.ownerId === filterOwner;
+      filterOwner === "all" || contact.owner === filterOwner;
 
     return matchesStatus && matchesOwner;
   });
@@ -179,17 +178,9 @@ export function CRMContacts() {
   // Get unique owners for filter dropdown
   const uniqueOwners = Array.from(
     new Set(
-      contacts.map((contact) => ({ id: contact.ownerId, name: contact.owner })),
+      contacts.map((contact) => contact.owner).filter(Boolean),
     ),
-  ).reduce(
-    (acc, owner) => {
-      if (!acc.find((o) => o.id === owner.id)) {
-        acc.push(owner);
-      }
-      return acc;
-    },
-    [] as { id: string; name: string }[],
-  );
+  ).map(owner => ({ id: owner, name: owner }));
 
   const statuses = ["Suspect", "Prospect", "Active Deal", "Do Not Call"];
   const sources = ["Data Research", "Referral", "Event"];
