@@ -504,7 +504,16 @@ export function CRMActiveDeals() {
                 Cancel
               </Button>
               <Button
-                onClick={handleSaveDeal}
+                onClick={() => {
+                  console.log("👆 DEAL SAVE BUTTON CLICKED!");
+                  console.log("Form data state:", formData);
+                  console.log("Validation check:", {
+                    hasDealName: !!formData.dealName,
+                    hasBusinessLine: !!formData.businessLine,
+                    isDisabled: !formData.dealName || !formData.businessLine
+                  });
+                  handleSaveDeal();
+                }}
                 disabled={!formData.dealName || !formData.businessLine}
                 className="bg-blue-600 hover:bg-blue-700"
               >

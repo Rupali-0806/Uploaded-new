@@ -400,7 +400,16 @@ export function CRMContacts() {
                 Cancel
               </Button>
               <Button
-                onClick={handleSaveContact}
+                onClick={() => {
+                  console.log("👆 CONTACT SAVE BUTTON CLICKED!");
+                  console.log("Form data state:", formData);
+                  console.log("Validation check:", {
+                    hasFirstName: !!formData.firstName,
+                    hasLastName: !!formData.lastName,
+                    isDisabled: !formData.firstName || !formData.lastName
+                  });
+                  handleSaveContact();
+                }}
                 disabled={!formData.firstName || !formData.lastName}
                 className="bg-blue-600 hover:bg-blue-700"
               >
