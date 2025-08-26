@@ -181,7 +181,7 @@ export function CRMAccounts() {
     "Healthcare",
     "Education",
   ];
-  const ratings = ["Hot", "Warm", "Cold"];
+  const ratings = ["PLATINUM", "GOLD", "SILVER", "BRONZE"];
   const employeeSizes = ["1-10", "10-50", "50-100", "100-500", "500+", "1000+"];
 
   const filteredAccounts = accounts.filter((account) => {
