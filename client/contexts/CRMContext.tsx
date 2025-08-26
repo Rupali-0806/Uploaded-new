@@ -278,8 +278,11 @@ export function CRMProvider({ children }: { children: ReactNode }) {
   // Contact operations
   const addContact = async (contactData: Omit<Contact, "id" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy">) => {
     try {
+      console.log("🚀 CRM Context: addContact called with:", contactData);
       setError(null);
+      console.log("📡 Calling api.contacts.create...");
       const response = await api.contacts.create(contactData);
+      console.log("📬 API response received:", response);
       if (response.success && response.data) {
         setContacts(prev => [...prev, response.data]);
         console.log("Contact added:", response.data);
@@ -322,8 +325,11 @@ export function CRMProvider({ children }: { children: ReactNode }) {
   // Deal operations
   const addDeal = async (dealData: Omit<ActiveDeal, "id" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy">) => {
     try {
+      console.log("🚀 CRM Context: addDeal called with:", dealData);
       setError(null);
+      console.log("📡 Calling api.deals.create...");
       const response = await api.deals.create(dealData);
+      console.log("📬 API response received:", response);
       if (response.success && response.data) {
         setDeals(prev => [...prev, response.data]);
         console.log("Deal added:", response.data);
@@ -428,4 +434,3 @@ export function useCRM() {
 
 // Export types for use in components
 export type { Lead, Account, Contact, ActiveDeal };
-
