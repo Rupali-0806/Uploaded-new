@@ -669,6 +669,9 @@ export const getDeal: RequestHandler = async (req, res) => {
 
 export const createDeal: RequestHandler = async (req, res) => {
   try {
+    console.log('📨 === CREATE DEAL REQUEST ===');
+    console.log('Raw request body:', JSON.stringify(req.body, null, 2));
+
     const data: any = req.body;
 
     // Handle date conversion
@@ -724,6 +727,9 @@ export const createDeal: RequestHandler = async (req, res) => {
       updatedBy: "system",
     };
 
+    console.log('Prepared dealData for Prisma:', JSON.stringify(dealData, null, 2));
+    console.log('About to call prisma.activeDeal.create...');
+
     const deal = await prisma.activeDeal.create({
       data: dealData as any,
     });
@@ -744,8 +750,13 @@ export const createDeal: RequestHandler = async (req, res) => {
 
     res.status(201).json(response);
   } catch (error) {
-    console.error("Error creating deal:", error);
-    res.status(500).json({ success: false, error: "Failed to create deal" });
+    console.error('🚨 ERROR CREATING DEAL:');
+    console.error('Error type:', error.constructor.name);
+    console.error('Error message:', error.message);
+    console.error('Full error:', error);
+    if (error.code) console.error('Error code:', error.code);
+    if (error.meta) console.error('Error meta:', error.meta);
+    res.status(500).json({ success: false, error: "Failed to create deal", details: error.message });
   }
 };
 
