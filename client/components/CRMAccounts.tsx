@@ -186,7 +186,7 @@ export function CRMAccounts() {
 
   const filteredAccounts = accounts.filter((account) => {
     const matchesFilter =
-      filterType === "all" || account.type.toLowerCase() === filterType;
+      filterType === "all" || (account.status && account.status.toLowerCase() === filterType);
 
     return matchesFilter;
   });
@@ -420,7 +420,7 @@ export function CRMAccounts() {
                   Customers
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  {accounts.filter((a) => a.type === "Customer").length}
+                  {accounts.filter((a) => a.status === "PROSPECT").length}
                 </p>
               </div>
               <Users className="h-8 w-8 text-green-600" />
@@ -436,7 +436,7 @@ export function CRMAccounts() {
                   Prospects
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  {accounts.filter((a) => a.type === "Prospect").length}
+                  {accounts.filter((a) => a.status === "ACTIVE_DEAL").length}
                 </p>
               </div>
               <DollarSign className="h-8 w-8 text-yellow-600" />
@@ -452,7 +452,7 @@ export function CRMAccounts() {
                   Partners
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  {accounts.filter((a) => a.type === "Partner").length}
+                  {accounts.filter((a) => a.status === "SUSPECT").length}
                 </p>
               </div>
               <Users className="h-8 w-8 text-purple-600" />
@@ -515,7 +515,7 @@ export function CRMAccounts() {
                   <TableCell>
                     <div>
                       <div className="font-medium text-gray-900 dark:text-gray-100">
-                        {account.name}
+                        {account.accountName}
                       </div>
                       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                         <Globe className="h-3 w-3 mr-1" />
@@ -535,13 +535,13 @@ export function CRMAccounts() {
                   <TableCell>
                     <div className="flex items-center text-sm">
                       <MapPin className="h-3 w-3 mr-1" />
-                      {account.location}
+                      {account.city}, {account.state}
                     </div>
                   </TableCell>
-                  <TableCell>{account.owner}</TableCell>
+                  <TableCell>{account.accountOwner}</TableCell>
                   <TableCell>
-                    <Badge className={getRatingColor(account.rating)}>
-                      {account.rating}
+                    <Badge className={getRatingColor(account.accountRating || "BRONZE")}>
+                      {account.accountRating}
                     </Badge>
                   </TableCell>
                   <TableCell>
