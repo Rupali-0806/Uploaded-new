@@ -95,7 +95,12 @@ export function CRMActiveDeals() {
       if (editingDeal) {
         // Update existing deal
         console.log("Updating existing deal:", editingDeal.id);
-        updateDeal(editingDeal.id, formData);
+        const updatePayload = {
+          ...formData,
+          probability: formData.probability != null ? String(formData.probability) : undefined,
+          dealValue: formData.dealValue != null ? String(formData.dealValue) : undefined,
+        };
+        updateDeal(editingDeal.id, updatePayload);
         alert("Deal updated successfully!");
       } else {
         // Create new deal
