@@ -120,12 +120,17 @@ export const getContact: RequestHandler = async (req, res) => {
 
 export const createContact: RequestHandler = async (req, res) => {
   try {
+    console.log('📨 === CREATE CONTACT REQUEST ===');
+    console.log('Raw request body:', JSON.stringify(req.body, null, 2));
+
     const data: any = req.body;
 
     // Handle field mapping from frontend
     const nameParts = data.name ? data.name.split(' ') : [];
     const firstName = data.firstName || nameParts[0] || '';
     const lastName = data.lastName || nameParts.slice(1).join(' ') || '';
+
+    console.log('Mapped firstName:', firstName, 'lastName:', lastName);
 
     const contactData = {
       firstName,
@@ -150,6 +155,9 @@ export const createContact: RequestHandler = async (req, res) => {
       updatedBy: "system",
     };
 
+    console.log('Prepared contactData for Prisma:', JSON.stringify(contactData, null, 2));
+    console.log('About to call prisma.contact.create...');
+
     const contact = await prisma.contact.create({
       data: contactData as any,
     });
@@ -166,8 +174,13 @@ export const createContact: RequestHandler = async (req, res) => {
 
     res.status(201).json(response);
   } catch (error) {
-    console.error("Error creating contact:", error);
-    res.status(500).json({ success: false, error: "Failed to create contact" });
+    console.error('🚨 ERROR CREATING CONTACT:');
+    console.error('Error type:', error.constructor.name);
+    console.error('Error message:', error.message);
+    console.error('Full error:', error);
+    if (error.code) console.error('Error code:', error.code);
+    if (error.meta) console.error('Error meta:', error.meta);
+    res.status(500).json({ success: false, error: "Failed to create contact", details: error.message });
   }
 };
 
@@ -1203,4 +1216,3 @@ export const initializeSampleData = async () => {
   console.log("✅ CRM sample data initialized");
   return;
 };
-
