@@ -17,7 +17,9 @@ async function apiRequest<T>(
   options: RequestInit = {}
 ): Promise<T> {
   try {
-    console.log(`Making API request to: ${API_BASE}${endpoint}`);
+    console.log(`🌐 Making API request to: ${API_BASE}${endpoint}`);
+    console.log('📦 Request method:', options.method || 'GET');
+    console.log('📝 Request body:', options.body || 'empty');
 
     const response = await fetch(`${API_BASE}${endpoint}`, {
       headers: {
@@ -27,8 +29,8 @@ async function apiRequest<T>(
       ...options,
     });
 
-    console.log(`API response status: ${response.status} for ${endpoint}`);
-    console.log(`API response headers:`, Object.fromEntries(response.headers.entries()));
+    console.log(`📡 API response status: ${response.status} for ${endpoint}`);
+    console.log(`📊 API response headers:`, Object.fromEntries(response.headers.entries()));
 
     // Check if response has a body and handle accordingly
     if (!response.ok) {
