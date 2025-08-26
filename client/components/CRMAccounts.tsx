@@ -176,7 +176,7 @@ export function CRMAccounts() {
     }
   };
 
-  const types = ["Customer", "Prospect", "Partner"];
+  const statuses = ["SUSPECT", "PROSPECT", "ACTIVE_DEAL", "DO_NOT_CALL"];
   const industries = [
     "Technology",
     "Software",
@@ -265,22 +265,21 @@ export function CRMAccounts() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="type">Type</Label>
+                <Label htmlFor="status">Status</Label>
                 <Select
-                  value={formData.type || ""}
+                  value={formData.status || ""}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, type: value })
+                    setFormData({ ...formData, status: value })
                   }
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select type" />
+                    <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
-                    {types.map((type) => (
-                      <SelectItem key={type} value={type}>
-                        {type}
-                      </SelectItem>
-                    ))}
+                    <SelectItem value="SUSPECT">Suspect</SelectItem>
+                    <SelectItem value="PROSPECT">Prospect</SelectItem>
+                    <SelectItem value="ACTIVE_DEAL">Active Deal</SelectItem>
+                    <SelectItem value="DO_NOT_CALL">Do Not Call</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -437,7 +436,7 @@ export function CRMAccounts() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Prospects
+                  Active Deals
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {accounts.filter((a) => a.status === "ACTIVE_DEAL").length}
