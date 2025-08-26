@@ -52,7 +52,6 @@ import {
   SelectValue,
 } from "./ui/select";
 
-
 export function CRMActiveDeals() {
   const { user } = useAuth();
   const { deals, addDeal, updateDeal, deleteDeal } = useCRM();
@@ -97,8 +96,12 @@ export function CRMActiveDeals() {
         console.log("Updating existing deal:", editingDeal.id);
         const updatePayload = {
           ...formData,
-          probability: formData.probability != null ? String(formData.probability) : undefined,
-          dealValue: formData.dealValue != null ? String(formData.dealValue) : undefined,
+          probability:
+            formData.probability != null
+              ? String(formData.probability)
+              : undefined,
+          dealValue:
+            formData.dealValue != null ? String(formData.dealValue) : undefined,
         };
         updateDeal(editingDeal.id, updatePayload);
         alert("Deal updated successfully!");
@@ -111,8 +114,10 @@ export function CRMActiveDeals() {
           associatedContact: formData.associatedContact || "",
           closingDate:
             formData.closingDate || new Date().toISOString().split("T")[0],
-          probability: formData.probability != null ? String(formData.probability) : "50",
-          dealValue: formData.dealValue != null ? String(formData.dealValue) : "0",
+          probability:
+            formData.probability != null ? String(formData.probability) : "50",
+          dealValue:
+            formData.dealValue != null ? String(formData.dealValue) : "0",
           approvedBy: formData.approvedBy || "",
           description: formData.description || "",
           nextStep: formData.nextStep || "",
@@ -121,7 +126,7 @@ export function CRMActiveDeals() {
           stage: formData.stage || "OPPORTUNITY_IDENTIFIED",
           dealOwner: user?.displayName || "Current User",
           createdBy: "current-user",
-          updatedBy: "current-user"
+          updatedBy: "current-user",
         };
         console.log("Creating new deal:", newDealData);
         addDeal(newDealData);

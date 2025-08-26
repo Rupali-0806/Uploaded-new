@@ -108,7 +108,7 @@ export function CRMAccounts() {
           accountOwner: formData.accountOwner || "Current User",
           status: formData.status || "PROSPECT",
           createdBy: "current-user",
-          updatedBy: "current-user"
+          updatedBy: "current-user",
         };
         console.log("Creating new account:", newAccountData);
         addAccount(newAccountData);
@@ -190,7 +190,8 @@ export function CRMAccounts() {
 
   const filteredAccounts = accounts.filter((account) => {
     const matchesFilter =
-      filterType === "all" || (account.status && account.status.toLowerCase() === filterType);
+      filterType === "all" ||
+      (account.status && account.status.toLowerCase() === filterType);
 
     return matchesFilter;
   });
@@ -531,7 +532,9 @@ export function CRMAccounts() {
                   </TableCell>
                   <TableCell>{account.industry}</TableCell>
                   <TableCell>
-                    <Badge className={getTypeColor(account.status || "PROSPECT")}>
+                    <Badge
+                      className={getTypeColor(account.status || "PROSPECT")}
+                    >
                       {account.status}
                     </Badge>
                   </TableCell>
@@ -546,7 +549,11 @@ export function CRMAccounts() {
                   </TableCell>
                   <TableCell>{account.accountOwner}</TableCell>
                   <TableCell>
-                    <Badge className={getRatingColor(account.accountRating || "BRONZE")}>
+                    <Badge
+                      className={getRatingColor(
+                        account.accountRating || "BRONZE",
+                      )}
+                    >
                       {account.accountRating}
                     </Badge>
                   </TableCell>

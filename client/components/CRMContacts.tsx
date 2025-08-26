@@ -169,18 +169,15 @@ export function CRMContacts() {
   const filteredContacts = contacts.filter((contact) => {
     const matchesStatus =
       filterStatus === "all" || contact.status?.toLowerCase() === filterStatus;
-    const matchesOwner =
-      filterOwner === "all" || contact.owner === filterOwner;
+    const matchesOwner = filterOwner === "all" || contact.owner === filterOwner;
 
     return matchesStatus && matchesOwner;
   });
 
   // Get unique owners for filter dropdown
   const uniqueOwners = Array.from(
-    new Set(
-      contacts.map((contact) => contact.owner).filter(Boolean),
-    ),
-  ).map(owner => ({ id: owner, name: owner }));
+    new Set(contacts.map((contact) => contact.owner).filter(Boolean)),
+  ).map((owner) => ({ id: owner, name: owner }));
 
   const statuses = ["SUSPECT", "PROSPECT", "ACTIVE_DEAL", "DO_NOT_CALL"];
   const sources = ["DATA_RESEARCH", "REFERRAL", "EVENT"];

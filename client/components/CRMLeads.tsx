@@ -110,7 +110,7 @@ export function CRMLeads() {
           rating: formData.rating || "COLD",
           owner: formData.owner || "current-user",
           createdBy: "current-user",
-          updatedBy: "current-user"
+          updatedBy: "current-user",
         };
         console.log("Creating new lead:", newLeadData);
         addLead(newLeadData);
@@ -171,7 +171,14 @@ export function CRMLeads() {
   };
 
   const statuses = ["NEW", "QUALIFIED", "WORKING", "UNQUALIFIED"];
-  const sources = ["WEBSITE", "REFERRAL", "TRADE_SHOW", "COLD_CALL", "EMAIL", "PARTNER"];
+  const sources = [
+    "WEBSITE",
+    "REFERRAL",
+    "TRADE_SHOW",
+    "COLD_CALL",
+    "EMAIL",
+    "PARTNER",
+  ];
 
   const filteredLeads = leads.filter((lead) => {
     const matchesFilter =
@@ -358,7 +365,9 @@ export function CRMLeads() {
               </Button>
               <Button
                 onClick={handleSaveLead}
-                disabled={!formData.firstName || !formData.lastName || !formData.company}
+                disabled={
+                  !formData.firstName || !formData.lastName || !formData.company
+                }
                 className="bg-blue-600 hover:bg-blue-700"
               >
                 <Save className="h-4 w-4 mr-2" />
