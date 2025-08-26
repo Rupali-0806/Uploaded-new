@@ -420,7 +420,7 @@ export function CRMAccounts() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Customers
+                  Prospects
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {accounts.filter((a) => a.status === "PROSPECT").length}
@@ -452,7 +452,7 @@ export function CRMAccounts() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Partners
+                  Suspects
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {accounts.filter((a) => a.status === "SUSPECT").length}
