@@ -120,17 +120,17 @@ export const getContact: RequestHandler = async (req, res) => {
 
 export const createContact: RequestHandler = async (req, res) => {
   try {
-    console.log('📨 === CREATE CONTACT REQUEST ===');
-    console.log('Raw request body:', JSON.stringify(req.body, null, 2));
+    console.log("📨 === CREATE CONTACT REQUEST ===");
+    console.log("Raw request body:", JSON.stringify(req.body, null, 2));
 
     const data: any = req.body;
 
     // Handle field mapping from frontend
-    const nameParts = data.name ? data.name.split(' ') : [];
-    const firstName = data.firstName || nameParts[0] || '';
-    const lastName = data.lastName || nameParts.slice(1).join(' ') || '';
+    const nameParts = data.name ? data.name.split(" ") : [];
+    const firstName = data.firstName || nameParts[0] || "";
+    const lastName = data.lastName || nameParts.slice(1).join(" ") || "";
 
-    console.log('Mapped firstName:', firstName, 'lastName:', lastName);
+    console.log("Mapped firstName:", firstName, "lastName:", lastName);
 
     const contactData = {
       firstName,
@@ -155,8 +155,11 @@ export const createContact: RequestHandler = async (req, res) => {
       updatedBy: "system",
     };
 
-    console.log('Prepared contactData for Prisma:', JSON.stringify(contactData, null, 2));
-    console.log('About to call prisma.contact.create...');
+    console.log(
+      "Prepared contactData for Prisma:",
+      JSON.stringify(contactData, null, 2),
+    );
+    console.log("About to call prisma.contact.create...");
 
     const contact = await prisma.contact.create({
       data: contactData as any,
@@ -174,13 +177,19 @@ export const createContact: RequestHandler = async (req, res) => {
 
     res.status(201).json(response);
   } catch (error) {
-    console.error('🚨 ERROR CREATING CONTACT:');
-    console.error('Error type:', error.constructor.name);
-    console.error('Error message:', error.message);
-    console.error('Full error:', error);
-    if (error.code) console.error('Error code:', error.code);
-    if (error.meta) console.error('Error meta:', error.meta);
-    res.status(500).json({ success: false, error: "Failed to create contact", details: error.message });
+    console.error("🚨 ERROR CREATING CONTACT:");
+    console.error("Error type:", error.constructor.name);
+    console.error("Error message:", error.message);
+    console.error("Full error:", error);
+    if (error.code) console.error("Error code:", error.code);
+    if (error.meta) console.error("Error meta:", error.meta);
+    res
+      .status(500)
+      .json({
+        success: false,
+        error: "Failed to create contact",
+        details: error.message,
+      });
   }
 };
 
@@ -669,8 +678,8 @@ export const getDeal: RequestHandler = async (req, res) => {
 
 export const createDeal: RequestHandler = async (req, res) => {
   try {
-    console.log('📨 === CREATE DEAL REQUEST ===');
-    console.log('Raw request body:', JSON.stringify(req.body, null, 2));
+    console.log("📨 === CREATE DEAL REQUEST ===");
+    console.log("Raw request body:", JSON.stringify(req.body, null, 2));
 
     const data: any = req.body;
 
@@ -678,14 +687,14 @@ export const createDeal: RequestHandler = async (req, res) => {
     let closingDate: Date | undefined = undefined;
     if (data.closingDate) {
       try {
-        if (typeof data.closingDate === 'string') {
+        if (typeof data.closingDate === "string") {
           // Handle different date formats
-          if (data.closingDate.includes('T')) {
+          if (data.closingDate.includes("T")) {
             // Already ISO format
             closingDate = new Date(data.closingDate);
           } else {
             // Convert YYYY-MM-DD to full ISO DateTime
-            closingDate = new Date(data.closingDate + 'T12:00:00.000Z');
+            closingDate = new Date(data.closingDate + "T12:00:00.000Z");
           }
         } else if (data.closingDate instanceof Date) {
           closingDate = data.closingDate;
@@ -693,11 +702,16 @@ export const createDeal: RequestHandler = async (req, res) => {
 
         // Validate the date is valid
         if (closingDate && isNaN(closingDate.getTime())) {
-          console.warn('Invalid date provided:', data.closingDate);
+          console.warn("Invalid date provided:", data.closingDate);
           closingDate = undefined;
         }
       } catch (error) {
-        console.error('Date conversion error:', error, 'Original value:', data.closingDate);
+        console.error(
+          "Date conversion error:",
+          error,
+          "Original value:",
+          data.closingDate,
+        );
         closingDate = undefined;
       }
     }
@@ -727,8 +741,11 @@ export const createDeal: RequestHandler = async (req, res) => {
       updatedBy: "system",
     };
 
-    console.log('Prepared dealData for Prisma:', JSON.stringify(dealData, null, 2));
-    console.log('About to call prisma.activeDeal.create...');
+    console.log(
+      "Prepared dealData for Prisma:",
+      JSON.stringify(dealData, null, 2),
+    );
+    console.log("About to call prisma.activeDeal.create...");
 
     const deal = await prisma.activeDeal.create({
       data: dealData as any,
@@ -750,13 +767,19 @@ export const createDeal: RequestHandler = async (req, res) => {
 
     res.status(201).json(response);
   } catch (error) {
-    console.error('🚨 ERROR CREATING DEAL:');
-    console.error('Error type:', error.constructor.name);
-    console.error('Error message:', error.message);
-    console.error('Full error:', error);
-    if (error.code) console.error('Error code:', error.code);
-    if (error.meta) console.error('Error meta:', error.meta);
-    res.status(500).json({ success: false, error: "Failed to create deal", details: error.message });
+    console.error("🚨 ERROR CREATING DEAL:");
+    console.error("Error type:", error.constructor.name);
+    console.error("Error message:", error.message);
+    console.error("Full error:", error);
+    if (error.code) console.error("Error code:", error.code);
+    if (error.meta) console.error("Error meta:", error.meta);
+    res
+      .status(500)
+      .json({
+        success: false,
+        error: "Failed to create deal",
+        details: error.message,
+      });
   }
 };
 
@@ -894,9 +917,9 @@ export const createLead: RequestHandler = async (req, res) => {
     const data: any = req.body;
 
     // Handle field mapping from frontend
-    const nameParts = data.name ? data.name.split(' ') : [];
-    const firstName = data.firstName || nameParts[0] || '';
-    const lastName = data.lastName || nameParts.slice(1).join(' ') || '';
+    const nameParts = data.name ? data.name.split(" ") : [];
+    const firstName = data.firstName || nameParts[0] || "";
+    const lastName = data.lastName || nameParts.slice(1).join(" ") || "";
 
     const leadData = {
       firstName,
@@ -905,9 +928,10 @@ export const createLead: RequestHandler = async (req, res) => {
       title: data.title,
       phone: data.phone,
       email: data.email,
-      leadSource: data.leadSource || data.source
-        ? (data.leadSource || data.source).replace(/\s+/g, "_").toUpperCase()
-        : undefined,
+      leadSource:
+        data.leadSource || data.source
+          ? (data.leadSource || data.source).replace(/\s+/g, "_").toUpperCase()
+          : undefined,
       status: data.status
         ? data.status.replace(/\s+/g, "_").toUpperCase()
         : undefined,

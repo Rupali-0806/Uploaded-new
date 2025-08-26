@@ -510,7 +510,7 @@ export function CRMActiveDeals() {
                   console.log("Validation check:", {
                     hasDealName: !!formData.dealName,
                     hasBusinessLine: !!formData.businessLine,
-                    isDisabled: !formData.dealName || !formData.businessLine
+                    isDisabled: !formData.dealName || !formData.businessLine,
                   });
                   handleSaveDeal();
                 }}

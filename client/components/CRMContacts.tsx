@@ -115,13 +115,23 @@ export function CRMContacts() {
           owner: user?.displayName || "Current User",
           status: formData.status,
           createdBy: "current-user",
-          updatedBy: "current-user"
+          updatedBy: "current-user",
         };
 
-        console.log('📦 EXACT DATA BEING SENT TO API:');
-        console.log('newContactData:', JSON.stringify(newContactData, null, 2));
-        console.log('Source value:', newContactData.source, 'Type:', typeof newContactData.source);
-        console.log('Status value:', newContactData.status, 'Type:', typeof newContactData.status);
+        console.log("📦 EXACT DATA BEING SENT TO API:");
+        console.log("newContactData:", JSON.stringify(newContactData, null, 2));
+        console.log(
+          "Source value:",
+          newContactData.source,
+          "Type:",
+          typeof newContactData.source,
+        );
+        console.log(
+          "Status value:",
+          newContactData.status,
+          "Type:",
+          typeof newContactData.status,
+        );
         console.log("Creating new contact:", newContactData);
         console.log("Calling addContact function...");
         await addContact(newContactData);
@@ -411,7 +421,7 @@ export function CRMContacts() {
                   console.log("Validation check:", {
                     hasFirstName: !!formData.firstName,
                     hasLastName: !!formData.lastName,
-                    isDisabled: !formData.firstName || !formData.lastName
+                    isDisabled: !formData.firstName || !formData.lastName,
                   });
                   handleSaveContact();
                 }}
