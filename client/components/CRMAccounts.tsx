@@ -146,14 +146,16 @@ export function CRMAccounts() {
     setShowNewAccountDialog(false);
   };
 
-  const getTypeColor = (type: string) => {
-    switch (type.toLowerCase()) {
-      case "customer":
-        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
+  const getTypeColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "suspect":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
       case "prospect":
         return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
-      case "partner":
-        return "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400";
+      case "active_deal":
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
+      case "do_not_call":
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
       default:
         return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400";
     }
@@ -161,12 +163,14 @@ export function CRMAccounts() {
 
   const getRatingColor = (rating: string) => {
     switch (rating.toLowerCase()) {
-      case "hot":
-        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
-      case "warm":
+      case "platinum":
+        return "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400";
+      case "gold":
         return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
-      case "cold":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
+      case "silver":
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400";
+      case "bronze":
+        return "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400";
       default:
         return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400";
     }
@@ -476,14 +480,17 @@ export function CRMAccounts() {
                 <DropdownMenuItem onClick={() => setFilterType("all")}>
                   All Types
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setFilterType("customer")}>
-                  Customer
+                <DropdownMenuItem onClick={() => setFilterType("suspect")}>
+                  Suspect
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setFilterType("prospect")}>
                   Prospect
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setFilterType("partner")}>
-                  Partner
+                <DropdownMenuItem onClick={() => setFilterType("active_deal")}>
+                  Active Deal
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setFilterType("do_not_call")}>
+                  Do Not Call
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -525,8 +532,8 @@ export function CRMAccounts() {
                   </TableCell>
                   <TableCell>{account.industry}</TableCell>
                   <TableCell>
-                    <Badge className={getTypeColor(account.type)}>
-                      {account.type}
+                    <Badge className={getTypeColor(account.status || "PROSPECT")}>
+                      {account.status}
                     </Badge>
                   </TableCell>
                   <TableCell className="font-medium">
