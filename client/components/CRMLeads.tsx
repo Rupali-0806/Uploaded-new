@@ -216,14 +216,25 @@ export function CRMLeads() {
             </DialogHeader>
             <div className="grid grid-cols-2 gap-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Name *</Label>
+                <Label htmlFor="firstName">First Name *</Label>
                 <Input
-                  id="name"
-                  value={formData.name || ""}
+                  id="firstName"
+                  value={formData.firstName || ""}
                   onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
+                    setFormData({ ...formData, firstName: e.target.value })
                   }
-                  placeholder="Enter full name"
+                  placeholder="Enter first name"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lastName">Last Name *</Label>
+                <Input
+                  id="lastName"
+                  value={formData.lastName || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, lastName: e.target.value })
+                  }
+                  placeholder="Enter last name"
                 />
               </div>
               <div className="space-y-2">
@@ -320,11 +331,11 @@ export function CRMLeads() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="source">Source</Label>
+                <Label htmlFor="leadSource">Source</Label>
                 <Select
-                  value={formData.source || ""}
+                  value={formData.leadSource || ""}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, source: value })
+                    setFormData({ ...formData, leadSource: value })
                   }
                 >
                   <SelectTrigger>
@@ -347,7 +358,7 @@ export function CRMLeads() {
               </Button>
               <Button
                 onClick={handleSaveLead}
-                disabled={!formData.name || !formData.company}
+                disabled={!formData.firstName || !formData.lastName || !formData.company}
                 className="bg-blue-600 hover:bg-blue-700"
               >
                 <Save className="h-4 w-4 mr-2" />
