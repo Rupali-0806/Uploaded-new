@@ -106,22 +106,22 @@ export function CRMActiveDeals() {
         // Create new deal
         const newDealData = {
           dealName: formData.dealName || "",
-          businessLine: formData.businessLine || "",
+          businessLine: formData.businessLine || "HUMAN_CAPITAL",
           associatedAccount: formData.associatedAccount || "",
           associatedContact: formData.associatedContact || "",
           closingDate:
             formData.closingDate || new Date().toISOString().split("T")[0],
-          probability: formData.probability || 50,
-          dealValue: formData.dealValue || 0,
+          probability: formData.probability != null ? String(formData.probability) : "50",
+          dealValue: formData.dealValue != null ? String(formData.dealValue) : "0",
           approvedBy: formData.approvedBy || "",
           description: formData.description || "",
           nextStep: formData.nextStep || "",
-          geo: formData.geo || "Americas",
-          entity: formData.entity || "Yitro Global",
-          stage: formData.stage || "Opportunity Identified",
-          owner: user?.displayName || "Current User",
-          ownerId: user?.id || "current-user",
-          createdAt: new Date().toISOString(),
+          geo: formData.geo || "AMERICAS",
+          entity: formData.entity || "YITRO_GLOBAL",
+          stage: formData.stage || "OPPORTUNITY_IDENTIFIED",
+          dealOwner: user?.displayName || "Current User",
+          createdBy: "current-user",
+          updatedBy: "current-user"
         };
         console.log("Creating new deal:", newDealData);
         addDeal(newDealData);
