@@ -131,7 +131,7 @@ export function CRMAccounts() {
     setShowNewAccountDialog(true);
   };
 
-  const handleDeleteAccount = (accountId: number) => {
+  const handleDeleteAccount = (accountId: string) => {
     console.log("handleDeleteAccount called with ID:", accountId);
     if (window.confirm("Are you sure you want to delete this account?")) {
       deleteAccount(accountId);
@@ -504,8 +504,8 @@ export function CRMAccounts() {
                 <TableHead>Location</TableHead>
                 <TableHead>Owner</TableHead>
                 <TableHead>Rating</TableHead>
-                <TableHead>Contacts</TableHead>
-                <TableHead>Last Activity</TableHead>
+                <TableHead>Employees</TableHead>
+                <TableHead>Updated</TableHead>
                 <TableHead className="w-[50px]"></TableHead>
               </TableRow>
             </TableHeader>
@@ -546,14 +546,14 @@ export function CRMAccounts() {
                   </TableCell>
                   <TableCell>
                     <div className="text-sm">
-                      <div>{account.contacts} contacts</div>
+                      <div>{account.numberOfEmployees}</div>
                       <div className="text-gray-500 dark:text-gray-400">
-                        {account.activeDeals} deals
+                        employees
                       </div>
                     </div>
                   </TableCell>
                   <TableCell className="text-sm text-gray-500 dark:text-gray-400">
-                    {account.lastActivity}
+                    {new Date(account.updatedAt).toLocaleDateString()}
                   </TableCell>
                   <TableCell>
                     <div className="flex space-x-2">
