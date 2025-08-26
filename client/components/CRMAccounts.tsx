@@ -292,11 +292,11 @@ export function CRMAccounts() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="employees">Employees</Label>
+                <Label htmlFor="numberOfEmployees">Employees</Label>
                 <Select
-                  value={formData.employees || ""}
+                  value={formData.numberOfEmployees || ""}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, employees: value })
+                    setFormData({ ...formData, numberOfEmployees: value })
                   }
                 >
                   <SelectTrigger>
@@ -312,23 +312,23 @@ export function CRMAccounts() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="location">Location</Label>
+                <Label htmlFor="city">City</Label>
                 <Input
-                  id="location"
-                  value={formData.location || ""}
+                  id="city"
+                  value={formData.city || ""}
                   onChange={(e) =>
-                    setFormData({ ...formData, location: e.target.value })
+                    setFormData({ ...formData, city: e.target.value })
                   }
-                  placeholder="City, State"
+                  placeholder="Enter city"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone</Label>
+                <Label htmlFor="boardNumber">Phone</Label>
                 <Input
-                  id="phone"
-                  value={formData.phone || ""}
+                  id="boardNumber"
+                  value={formData.boardNumber || ""}
                   onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
+                    setFormData({ ...formData, boardNumber: e.target.value })
                   }
                   placeholder="+1 (555) 123-4567"
                 />
@@ -345,22 +345,22 @@ export function CRMAccounts() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="owner">Owner</Label>
+                <Label htmlFor="accountOwner">Owner</Label>
                 <Input
-                  id="owner"
-                  value={formData.owner || ""}
+                  id="accountOwner"
+                  value={formData.accountOwner || ""}
                   onChange={(e) =>
-                    setFormData({ ...formData, owner: e.target.value })
+                    setFormData({ ...formData, accountOwner: e.target.value })
                   }
                   placeholder="Account owner"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="rating">Rating</Label>
+                <Label htmlFor="accountRating">Rating</Label>
                 <Select
-                  value={formData.rating || ""}
+                  value={formData.accountRating || ""}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, rating: value })
+                    setFormData({ ...formData, accountRating: value })
                   }
                 >
                   <SelectTrigger>
@@ -383,7 +383,7 @@ export function CRMAccounts() {
               </Button>
               <Button
                 onClick={handleSaveAccount}
-                disabled={!formData.name || !formData.industry}
+                disabled={!formData.accountName || !formData.industry}
                 className="bg-blue-600 hover:bg-blue-700"
               >
                 <Save className="h-4 w-4 mr-2" />
