@@ -85,8 +85,8 @@ export function CRMLeads() {
   const handleSaveLead = () => {
     console.log("Saving lead:", formData);
 
-    if (!formData.name || !formData.company) {
-      alert("Name and Company are required!");
+    if (!formData.firstName || !formData.lastName || !formData.company) {
+      alert("First Name, Last Name and Company are required!");
       return;
     }
 
@@ -99,16 +99,18 @@ export function CRMLeads() {
       } else {
         // Create new lead
         const newLeadData = {
-          name: formData.name || "",
+          firstName: formData.firstName || "",
+          lastName: formData.lastName || "",
           company: formData.company || "",
           title: formData.title || "",
           email: formData.email || "",
           phone: formData.phone || "",
-          status: formData.status || "New",
-          source: formData.source || "Website",
-          score: formData.score || 0,
-          value: formData.value || "$0",
-          lastActivity: "Just now",
+          status: formData.status || "NEW",
+          leadSource: formData.leadSource || "WEBSITE",
+          rating: formData.rating || "COLD",
+          owner: formData.owner || "current-user",
+          createdBy: "current-user",
+          updatedBy: "current-user"
         };
         console.log("Creating new lead:", newLeadData);
         addLead(newLeadData);
